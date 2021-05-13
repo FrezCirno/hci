@@ -46,20 +46,22 @@ class myWindow(QtWidgets.QDialog):
         self.ui.movie.jumpToFrame(0)
         self.ui.label_6.setText(text or 'Pardon?')
 
-        if '播放音乐' in text or '来点音乐' in text:
-            app_function.play_music()
-        elif '编辑文本' in text or '编辑文件' in text or '打开记事本' in text:
-            app_function.open_file()
-        elif '打开浏览器' in text:
-            app_function.open_browser()
-        elif '打开微信' in text:
-            app_function.open_wechat()
-        elif '搜索' in text:
-            try:
+        try:
+            if '播放音乐' in text or '来点音乐' in text:
+                app_function.play_music()
+            elif '编辑文本' in text or '编辑文件' in text or '打开记事本' in text:
+                app_function.open_file()
+            elif '打开浏览器' in text:
+                app_function.open_browser()
+            elif '打开微信' in text:
+                app_function.open_wechat()
+            elif '搜索' in text:
                 keyword = text[text.index('搜索') + 2:]
                 app_function.search(keyword)
-            except:
-                pass
+            else:
+                self.ui.label_6.setText('Pardon?')
+        except:
+            self.ui.label_6.setText('Pardon?')
 
         self.timer.start()
 
