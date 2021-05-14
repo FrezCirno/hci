@@ -15,11 +15,10 @@ class Recorder:
         self.recognizer = sr.Recognizer()
         self.mic = sr.Microphone(sample_rate=rate)
 
-    def listen(self):
+    def listen(self, adjust_time=0.5):
         with self.mic as source:
             try:
-                print("适应噪声......")
-                self.recognizer.adjust_for_ambient_noise(source, 0.5)
+                self.recognizer.adjust_for_ambient_noise(source, adjust_time)
                 print("开始录音......")
                 audio = self.recognizer.listen(source)
                 print("录音结束")
