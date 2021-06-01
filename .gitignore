@@ -131,3 +131,8 @@ ignore/
 .vscode/
 *.zip
 *.pdf
+database/
+.idea/
+saved_features_recom.txt
+neighbor_list_recom.pickle
+imagenet/classify_image_graph_def.pb
