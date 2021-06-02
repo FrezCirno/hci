@@ -1,5 +1,6 @@
 from pathlib import Path
-from flask import Flask, request, render_template, make_response
+from flask import Flask, request, render_template, make_response, redirect
+from flask.helpers import url_for
 from flask_httpauth import HTTPBasicAuth
 import os
 import shutil
@@ -38,6 +39,7 @@ def get_image(image_id):
     headers = {
         "Content-Disposition": f"attachment; filename=im{image_id}.jpg",
         "Content-Type": "image/jpeg",
+        "Cache-Control": "public, max-age=43200"
     }
     with open(f'database/dataset/im{image_id}.jpg', 'rb') as f:
         body = f.read()
@@ -66,12 +68,12 @@ def upload_img():
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return redirect("/index.html", 301)
 
 
 @app.route("/favorite")
 def favorite():
-    return render_template("favorite.html")
+    return redirect("/favorite.html", 301)
 
 
 @app.route("/get_tag", methods=["POST"])
