@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="cn">
+
+<head>
+  <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+  <title>IMAGE SEARCH</title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"
+    integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.2/css/bulma.min.css"
+    referrerpolicy="no-referrer">
+  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-​carousel.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css"
+    integrity="sha512-OdEXQYCOldjqUEsuMKsZRj93Ht23QRlhIb8E/X0sbwZhme8eUw6g8q7AdxGJKakcBbv7+/PX0Gc2btf7Ru8cZA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/solid.min.css"
+    integrity="sha512-jQqzj2vHVxA/yCojT8pVZjKGOe9UmoYvnOuM/2sQ110vxiajBU+4WkyRs1ODMmd4AfntwUEV4J+VfM6DkfjLRg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/regular.min.css"
+    integrity="sha512-Nqct4Jg8iYwFRs/C34hjAF5og5HONE2mrrUV1JZUswB+YU7vYSPyIjGMq+EAQYDmOsMuO9VIhKpRUa7GjRKVlg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="/js/favorites.js"></script>
+  <script src="/js/animated.js"></script>
+</head>
+
+<body>
+  <nav class="navbar is-light" role="navigation" aria-label="main navigation"
+    style="box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);padding: 0.2rem 2rem;">
+    <div class="navbar-brand">
+      <a class="navbar-item" href="/">
+        <img src="/images/elasticsearch-logo-640x196.png">
+        <span style="font-size: 19px;">&nbsp;&nbsp;ImageSearch</span>
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <div class="buttons">
+            <a href="/" class="button is-primary">
+              <strong>回到首页</strong>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero is-info is-small">
+    <div class="hero-body" style="transition: all 1s ease;">
+      <div class="container has-text-centered">
+        <p class="subtitle is-4">
+          收藏夹中共有
+          <strong style="color: lightsalmon;" data-bind="text: $root.flatImgs().length"></strong>
+          张图片
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div data-bind="foreach: imgChunks()">
+        <div class="columns" data-bind="foreach: $data">
+          <div class="column">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-4by3">
+                  <img data-bind="attr: { src: '/image/' + $data.id(), alt: $data.id() }">
+                </figure>
+              </div>
+              <div class="card-content">
+                <div class="media level">
+                  <div class="media-content level-left">
+                    <p class="title is-4">Image <span data-bind="text: $data.id()"></span></p>
+                  </div>
+                  <div class="level-right">
+                    <button class="button" data-bind="click: (d) => $data.toggle(d, $element), clickBubble: false">
+                      <i class="fa-star animate__animated" data-bind="class: $data.like() ? 'fas' : 'far'"
+                        class="fa-star"></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div class="content">
+                  <span data-bind="foreach: tag">
+                    <a href="#" data-bind="text: '#' + $data"></a>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+
+<script>
+  class ViewModel {
+    constructor() {
+      this.flatImgs = ko.observableArray([]);
+      this.imgChunks = ko.observableArray([]);
+
+      let favorite = getFavorite();
+      fetch("/get_tag", {
+        method: "POST",
+        body: JSON.stringify(favorite),
+        cache: "no-cache",
+        headers: {
+          'Content-Type': 'application/json;charset=UTF-8'
+        }
+      }).then(res => res.json())
+        .then(res => res.images.map(image => new ImageModel({ ...image, like: true })))
+        .then(oimages => {
+          console.log(oimages);
+          return oimages;
+        })
+        .then(oimages => {
+          let chunks = [];
+          for (let i = 0; i < oimages.length; i += 3) {
+            chunks.push(oimages.slice(i, i + 3))
+          }
+          this.flatImgs(oimages);
+          this.imgChunks(chunks);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    }
+  };
+
+  let vm = new ViewModel();
+  ko.applyBindings(vm);
+  window.vm = vm;
+
+</script>
+
+</html>

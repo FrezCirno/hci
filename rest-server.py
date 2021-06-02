@@ -46,13 +46,6 @@ def get_image(image_id):
 
 @app.route('/imgUpload', methods=['GET', 'POST'])
 def upload_img():
-    return {
-        'images': [{
-            'id': image_id,
-            'tag': list(id_tag_dict[image_id])
-        } for image_id in ['3', '2977', '467', '609', '887', '1679', '491', '2059', '2766']]
-    }
-
     # check if the post request has the file part
     if 'file' not in request.files:
         return 'No file', 400
