@@ -1,9 +1,6 @@
 from pathlib import Path
-from flask import Flask, request, render_template, make_response, redirect
-from flask.helpers import url_for
-from flask_httpauth import HTTPBasicAuth
+from flask import Flask, request, make_response, redirect
 import os
-import shutil
 import numpy as np
 import search
 
@@ -61,7 +58,7 @@ def upload_img():
     return {
         'images': [{
             'id': image_id,
-            'tag': list(id_tag_dict[image_id])
+            'tag': list(id_tag_dict.get(image_id, []))
         } for image_id in image_id_list]
     }
 

@@ -8,7 +8,6 @@ import pickle
 import numpy as np
 from pathlib import Path
 import tensorflow.compat.v1 as tf
-from imageio import imsave, imread
 from scipy.spatial.distance import cosine
 from tensorflow.python.platform import gfile
 
