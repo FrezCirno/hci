@@ -87,6 +87,11 @@
                       <i class="fa-star animate__animated" data-bind="class: $data.like() ? 'fas' : 'far'"
                         class="fa-star"></i>
                     </button>
+                    <a data-bind="attr: { href: '/image/' + $data.id(), download: 'Image_' + $data.id() + '.png' }">
+                      <button class="button">
+                        <i class="fas fa-download"></i>
+                      </button>
+                    </a>
                   </div>
                 </div>
 

@@ -80,7 +80,7 @@
 
         <!-- ko if: state()==State.SELECTIMAGE -->
         <div data-bind="event: { drop: ko_dropHandler, dragover: ko_dragOverHandler }">
-          <div class="title is-4">在此处上传图片</div>
+          <div class="title is-4">将图片拖到此处</div>
           <div class="level">
             <div class="level-item">
               <div class="file is-large is-boxed" data-bind="css: { 'has-name': fileName() }">
@@ -203,13 +203,18 @@
               <div class="card-content">
                 <div class="media level">
                   <div class="media-content level-left">
-                    <p class="title is-4">Image <span data-bind="text: $data.id()"></span></p>
+                    <p class="title is-4">Image <span data-bind="text: $data.id"></span></p>
                   </div>
                   <div class="level-right">
                     <button class="button" data-bind="click: (d) => $data.toggle(d, $element), clickBubble: false">
                       <i class="fa-star animate__animated" data-bind="class: $data.like() ? 'fas' : 'far'"
                         class="fa-star"></i>
                     </button>
+                    <a data-bind="attr: { href: '/image/' + $data.id(), download: 'Image_' + $data.id() + '.png' }">
+                      <button class="button">
+                        <i class="fas fa-download"></i>
+                      </button>
+                    </a>
                   </div>
                 </div>
 
