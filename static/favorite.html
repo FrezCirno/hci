@@ -3,14 +3,13 @@
 
 <head>
   <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-  <title>IMAGE SEARCH</title>
+  <title>My Favorite</title>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.5.1/knockout-latest.js"
     integrity="sha512-2AL/VEauKkZqQU9BHgnv48OhXcJPx9vdzxN1JrKDVc4FPU/MEE/BZ6d9l0mP7VmvLsjtYwqiYQpDskK9dG8KBA=="
     crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.2/css/bulma.min.css"
     referrerpolicy="no-referrer">
-  <script src="https://cdn.jsdelivr.net/npm/bulma-carousel@4.0.4/dist/js/bulma-​carousel.min.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/fontawesome.min.css"
     integrity="sha512-OdEXQYCOldjqUEsuMKsZRj93Ht23QRlhIb8E/X0sbwZhme8eUw6g8q7AdxGJKakcBbv7+/PX0Gc2btf7Ru8cZA=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
@@ -21,6 +20,13 @@
     integrity="sha512-Nqct4Jg8iYwFRs/C34hjAF5og5HONE2mrrUV1JZUswB+YU7vYSPyIjGMq+EAQYDmOsMuO9VIhKpRUa7GjRKVlg=="
     crossorigin="anonymous" referrerpolicy="no-referrer">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.min.js"
+    integrity="sha512-0goo56vbVLOJt9J6TMouBm2uE+iPssyO+70sdrT+J5Xbb5LsdYs31Mvj4+LntfPuV+VlK0jcvcinWQG5Hs3pOg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.min.css"
+    integrity="sha512-1cfqrTRQ8V1TnQsSu97+x7PoylALHKOQuwpFaa6lwe6lo5EOUmGNmX3LBq/yxUokfGaUtWkjZJGmuXqG5THgdA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  </link>
   <script src="/js/favorites.js"></script>
   <script src="/js/animated.js"></script>
 </head>
@@ -68,7 +74,7 @@
 
   <section class="section">
     <div class="container">
-      <div data-bind="foreach: imgChunks()">
+      <div id="result_container" data-bind="foreach: imgChunks()">
         <div class="columns" data-bind="foreach: $data">
           <div class="column">
             <div class="card">
@@ -137,6 +143,7 @@
           }
           this.flatImgs(oimages);
           this.imgChunks(chunks);
+          new Viewer(document.getElementById('result_container'));
         })
         .catch(err => {
           console.log(err);

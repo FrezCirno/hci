@@ -26,6 +26,12 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.0/slimselect.min.js"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/slim-select/1.27.0/slimselect.min.css" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.min.js"
+    integrity="sha512-0goo56vbVLOJt9J6TMouBm2uE+iPssyO+70sdrT+J5Xbb5LsdYs31Mvj4+LntfPuV+VlK0jcvcinWQG5Hs3pOg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/viewerjs/1.9.0/viewer.min.css"
+    integrity="sha512-1cfqrTRQ8V1TnQsSu97+x7PoylALHKOQuwpFaa6lwe6lo5EOUmGNmX3LBq/yxUokfGaUtWkjZJGmuXqG5THgdA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
   </link>
   <script src="/js/favorites.js"></script>
   <script src="/js/animated.js"></script>
@@ -191,7 +197,7 @@
             data-bind="click: ko_filter">筛选</button>
         </div>
       </div>
-      <div data-bind="foreach: imgChunks()">
+      <div id="result_container" data-bind="foreach: imgChunks()">
         <div class="columns" data-bind="foreach: $data">
           <div class="column">
             <div class="card">
@@ -268,6 +274,16 @@
         }
       }
     }
+    updataResult(oimages) {
+      let chunks = [];
+      for (let i = 0; i < oimages.length; i += 3) {
+        chunks.push(oimages.slice(i, i + 3));
+      }
+      this.flatImgs(oimages);
+      this.resultCount(oimages.length);
+      this.imgChunks(chunks);
+      new Viewer(document.getElementById('result_container'));
+    }
     sumbitFile(file) {
       this.fileName(file.name);
       this.state(State.WAITRESULT);
@@ -287,14 +303,8 @@
           return oimages;
         })
         .then(oimages => {
-          let chunks = [];
-          for (let i = 0; i < oimages.length; i += 3) {
-            chunks.push(oimages.slice(i, i + 3));
-          }
-          this.flatImgs(oimages);
-          this.resultCount(oimages.length);
-          this.imgChunks(chunks);
           this.state(State.SHOWRESULT);
+          this.updataResult(oimages);
           initMultiSelect();
         })
         .catch(err => {
@@ -320,12 +330,7 @@
         return false;
       });
 
-      let chunks = [];
-      for (let i = 0; i < filtered.length; i += 3) {
-        chunks.push(filtered.slice(i, i + 3));
-      }
-      this.resultCount(filtered.length);
-      this.imgChunks(chunks);
+      this.updataResult(filtered);
     }
   };
 
