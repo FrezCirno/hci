@@ -80,7 +80,8 @@ def get_tag():
         'images': [{
             'id': image_id,
             'tag': list(id_tag_dict[image_id])
-        } for image_id in image_id_list]
+        } for image_id in image_id_list
+            if image_id in id_tag_dict]
     }
 
 

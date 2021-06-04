@@ -30,9 +30,6 @@ with open('neighbor_list_recom.pickle', 'rb') as f:
 
 
 def get_top_k_similar(image_data, pred, pred_final, k):
-    print("total data", len(pred))
-    print(image_data.shape)
-
     top_k_ind = np.argsort([cosine(image_data, pred_row) for pred_row in pred])[:k]
     return [Path(pred_final[neighbor]).name[2:-4] for neighbor in top_k_ind]
 
